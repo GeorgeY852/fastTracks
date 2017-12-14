@@ -1,0 +1,68 @@
+.navbar-dark .navbar-brand {
+    color: white;
+}
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
+}
+.navbar-toggler {
+	color:white;
+}
+body {
+	background-color: #603760;
+	color:white;
+}
+
+#pickUsername {
+	display: none;
+}
+
+#loginSpotify {
+	display: none;
+}
+
+#defaultRoomSelection {
+	display:none;
+}
+
+#someRoom {
+	display:none;
+}
+#setUpRoom {
+	display:none
+}
+
+#aRoom {
+	display: none;
+}
+
+#djName {
+  width: 60%;
+  margin: 0 auto;
+  float: none;
+}
+
+#spotifySearch {
+	color: black;
+}
+.row {
+margin-left: 0px;
+margin-right: 0px;
+}
+.list-group {
+	overflow: scroll;
+	max-height: 65%;
+	-webkit-overflow-scrolling: touch;
+}
+
+.list-group button {
+	padding: 5% 5%;
+	padding-bottom: 15%;
+}
+#allRooms .row .card {
+	margin: 3%;
+	color:white;
+	background-color: cornflowerblue;
+}
+.js-scroll-trigger {
+	
+}

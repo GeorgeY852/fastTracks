@@ -1,0 +1,143 @@
+<!-- 	
+	George Yao
+	gyao
+	67-328 
+	Final Project
+	Index page
+	December 13, 2017
+-->
+
+<html>
+	<head>
+    <meta charset="utf-8">
+		
+	<!-- Using Bootstrap framework, ajax, jquery, socketio, js and css --> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="js/app.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/fastTracks.css">
+	<title>FastTracks </title>
+	</head>
+	<body>
+    <!-- Navigation -->
+    	<nav class="navbar navbar-expand-lg navbar-dark	" id="mainNav">
+      		<div class="container">
+        		<a id="logo"class="navbar-brand js-scroll-trigger" href="/">FastTracks</a>
+				<div class="collapse navbar-collapse" id="navbarResponsive">
+          		<ul class="navbar-nav text-uppercase ml-auto">
+					<% if (user) {%>
+					    <li class="nav-item">
+              				<a class="nav-link js-scroll-trigger">Signed in as <%= user._json.display_name%></a> 
+            			</li>
+            			<li class="nav-item">
+              				<a id="logout" class="nav-link js-scroll-trigger"  href="/logout">Logout</a> 
+            			</li>
+					<%}%>
+            		<li class="nav-item">
+              			<a class="nav-link js-scroll-trigger" href="#about">README</a>
+					</li>
+          		</ul>
+        		</div>
+      		</div>
+    	</nav>
+	<br><br>
+	
+		<% if (!user) {%> 
+		<div id="initialSelection">
+			<center><H1>Welcome to FastTracks</H1><h3>Suggest songs to DJs, <br>Fast.</h3></center><br><br>
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="col-md-4">
+				<center>
+				<form id = "pickRole">
+					<h4>Step 1: What type of user are you?</h4><br>
+        			<input class="col-md-4 btn btn-primary btn-lg" type="submit" name="djSelect" value="DJ">
+        			<input class="col-md-4 btn btn-primary btn-lg" type="submit" name="guestSelect" value="Guest">
+				</form>
+				<form id = "pickUsername">
+				<!--<label for="un_form">Step 2: Select a username!</label>-->
+					<h4>Step 2: Select a username!</h4>
+					<input type="text" id="un_form" class="form-control has-danger" aria-describedby="usernameHelp" name="username" placeholder="Kid with red hat">
+					<small id="usernameHelp" class="form-controlform-text text-muted">This username is a one-time use only! Exiting the app allows another to take up your name!</small><br>
+					<input type="submit" class="col-md-4 btn btn-primary btn-lg" value="submit">
+				</form>
+				<form id = "loginSpotify">
+        			<h4>Step 2: Log in through spotify!</h4>
+        			<a href="/login" class="col-md-4 btn btn-primary btn-lg">Log in</a>
+        			<div id="oauth">
+					</div>
+				</form>
+				</center>
+				</div>
+			</div>
+		<% } %>
+		</div>
+		<% if (user) {%>
+			<div id="djLoggedIn"> 
+				<center><H1>Welcome to FastTracks</H1><h3>Suggest songs to DJs, <br>Fast.</h3></center><br><br>
+				<div class="row">
+					<div class="col-md-4"></div>
+					<div class="col-md-4">
+					<center>
+					<form id = "pickDJName">
+						<h4>Step 3: Pick a DJ name!</h4>
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<div class="input-group-addon">DJ</div>
+							<input type="text" class="form-control" id="dj_name_form" placeholder="Khaled">
+						</div><br>
+						<input type="submit" class="col-md-4 btn btn-primary btn-lg" value="Submit">
+					</form>
+					<form id = "setUpRoom" class="form-group row">
+						<h4>Final step: Set up your room!</h4>
+						Room Name: <input type="text" class="form-control" id="room_name" placeholder="John's Birthday party">
+						Select room playlist: 
+						<div id="playlistsFromSpotify"></div><br>
+						<input type="submit" class="col-md-4 btn btn-primary btn-lg" value="Create"><br>
+					</form>			
+					</center>
+					</div>
+				</div>
+		<% } %>
+		</div>		
+	
+		<!-- Guests on this web app should see a selection of rooms to join-->
+		<div id="defaultRoomSelection">
+			<h3>Choose a room: </h3>
+			<div id="allRooms"></div>
+		</div>
+		<!-- When a guest has selected a room, or when a DJ creates a room,
+			 aRoom will appear and display the room's information -->
+		<div id="aRoom">
+			<div class="row" id="aRoomTopRow">
+				<h3 class="col-md-4"> Welecome to <span id="DJroom"></span><br>
+				 	Hosted by DJ <span id="DJname"></span>
+				</h3>
+				<div class="col-md-4"></div>
+			</div>
+			<div class="row">
+				<!-- A room is composed of three things: a search section,
+					 the room's suggestion list and the DJ's playlist -->
+				<div class="col-md-4" id="spotifySearch">
+					<div class="input-group stylish-input-group">
+						<input type="text" id="searchSpotify" class="form-control" placeholder="Search for songs to suggest!" >
+						<span class="input-group-addon">
+							<button type="submit" id = "searchButton" onclick="searchThroughSpotify()">
+							<span class="glyphicon glyphicon-cloud" onclick="searchThroughSpotify()"></span>
+							</button>  
+						</span>
+					</div>
+					<br><br>
+					<div id=responseList></div>
+				</div>
+				<div class="col-md-4" id="songSuggestions"></div>
+				<div class="col-md-4" id="roomPlaylist"></div>
+			</div>
+		</div>
+	</body>
+</html>
